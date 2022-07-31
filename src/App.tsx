@@ -19,10 +19,10 @@ function App() {
           <Heading mb={5}>Log in</Heading>
           <Text mb={3} textAlign="center">Please Select An Account.</Text>
             <Button colorScheme="gray" w="100%">Client</Button>
-          <Stack direction='row' p={3}>
-            <Divider />
+          <Stack direction="row" p={3}>
+            <Divider colorScheme="blackAlpha" />
             <Text>Or</Text>
-            <Divider />
+            <Divider colorScheme="blackAlpha" />
           </Stack>
             <Button colorScheme="gray" w="100%">Admin</Button>
         </Flex>
