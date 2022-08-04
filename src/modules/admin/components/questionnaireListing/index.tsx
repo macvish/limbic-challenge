@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Flex, Heading } from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
 import Button from '../../../../shared/components/Button'
 import Input from '../../../../shared/components/Input'
 import Table from '../../../../shared/components/Table'
+import { AppDispatch, GenericObject } from '../../../../shared/models'
+import { adminSelector } from '../../store/reducer'
+import { setQuestionnaires } from '../../store/actions'
 
 const dummyData = [
     {
@@ -30,17 +34,27 @@ const column = [
 ]
 
 const QuestionListing: React.FC = () => {
-    const [data, setData] = useState([])
+    const [data, setData] = useState<GenericObject[]>([])
+    const dispatch = useDispatch<AppDispatch>()
+    const { questionnaires } = useSelector(adminSelector)
     
-    const onSearch = (text: string) => {}
+    const onSearch = (text: string) => {
+        const newQuestionnaires = questionnaires.filter(item => String(item?.name).toLowerCase().includes(text))
+        setData(newQuestionnaires)
+    }
 
-    useEffect(() => {}, [])
+    useEffect(() => {
+        const result = localStorage.getItem('questionnaires')
+        if (result) dispatch(setQuestionnaires(JSON.parse(result)))
+    }, [])
+
+    useEffect(() => setData(questionnaires), [questionnaires])
     
     return (
         <Box>
             <Heading size="lg" mb={4}>Questionnaires</Heading>
             <Flex justify="space-between">
-                <Box>
+                <Box>  
                     <Button title="Create Questionnaire" />
                 </Box>
                 <Box>

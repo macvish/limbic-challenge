@@ -1,14 +1,16 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit'
 
-import { AdminState } from '../../models'
-import { RootState } from '../../../../shared/models'
+import { ActionType, AdminState } from '../../models'
+import { GenericObject, RootState } from '../../../../shared/models'
 
 const initialAdminState: AdminState = {
     questionnaires: []
 }
 
 const adminReducer = createReducer(initialAdminState, {
-   
+    [ActionType.SET_QUESTIONNAIRES]: (state, action: PayloadAction<GenericObject[]>) => {
+        state.questionnaires = action.payload
+   }
 })
 
 export const adminSelector = (state: RootState) => state.admin
