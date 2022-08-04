@@ -1,6 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit"
 
-export const rootReducer = combineReducers({})
+import adminReducer from "../modules/admin/store/reducer"
+
+export const rootReducer = combineReducers({
+    admin: adminReducer
+})
 
 const store = configureStore({
     reducer: rootReducer
