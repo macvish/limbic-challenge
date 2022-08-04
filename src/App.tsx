@@ -1,5 +1,7 @@
 import React from 'react'
 import { Box, Button, Divider, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
+import { RouteURL } from './helpers/path'
 
 
 function App() {
@@ -18,13 +20,17 @@ function App() {
         >
           <Heading mb={5}>Log in</Heading>
           <Text mb={3} textAlign="center">Please Select An Account.</Text>
+          <Link to='/'>
             <Button colorScheme="gray" w="100%">Client</Button>
+          </Link>
           <Stack direction="row" p={3}>
             <Divider colorScheme="blackAlpha" />
             <Text>Or</Text>
             <Divider colorScheme="blackAlpha" />
           </Stack>
+          <Link to={RouteURL.AdminDashboard}>
             <Button colorScheme="gray" w="100%">Admin</Button>
+          </Link>
         </Flex>
       </Flex>
       </Flex>
