@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Box, Flex, HStack } from '@chakra-ui/react'
 import { DeleteIcon, EditIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons' 
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +13,7 @@ import { adminSelector } from '../../store/reducer'
 import { setQuestionnaires } from '../../store/actions'
 import { RouteURL } from '../../../../lib/path'
 import DashboardHeader from '../../../../shared/components/DashboardHeader'
+import AlertModal from '../../../../shared/components/AlertModal'
 
 const column = [
     {
@@ -34,8 +35,11 @@ const column = [
 ]
 
 const QuestionListing: React.FC = () => {
+    const [selectedQuestionnaireIndex, setSelectedQuestionnaireIndex] = useState<number>(0)
+    const [alertIsOpen, setAlertIsOpen] = useState<boolean>(false)
     const [data, setData] = useState<GenericObject[]>([])
     const navigate = useNavigate()
+    const dispatch = useDispatch<AppDispatch>()
     const { questionnaires } = useSelector(adminSelector)
     
     const onSearch = (text: string) => {
@@ -43,7 +47,14 @@ const QuestionListing: React.FC = () => {
         setData(newQuestionnaires)
     }
 
-    const deletQuestionnaire = (index: number) => {}
+    const deleteQuestionnaire = () => {
+        const newQuestionnaires = [...questionnaires]
+        newQuestionnaires.splice(selectedQuestionnaireIndex, 1)
+
+        localStorage.setItem('questionnaires', JSON.stringify(newQuestionnaires))
+        dispatch(setQuestionnaires([...newQuestionnaires]))
+        setAlertIsOpen(false)
+    }
 
     useEffect(() => setData(questionnaires.map((item, index) => ({
         key: item.id,
@@ -57,7 +68,10 @@ const QuestionListing: React.FC = () => {
                 onClick={() => navigate(`${RouteURL.EditQuestionnaire}${item.id}`)}
                 cursor="pointer"
             />
-            <DeleteIcon color="red" cursor="pointer" />
+            <DeleteIcon color="red" cursor="pointer" onClick={() => {
+                setSelectedQuestionnaireIndex(index)
+                setAlertIsOpen(true)
+            }} />
         </HStack>
     }))), [questionnaires])
     
@@ -75,6 +89,15 @@ const QuestionListing: React.FC = () => {
             <Box>
                 <Table column={column} data={data} />
             </Box>
+            <AlertModal
+                isOpen={alertIsOpen}
+                title="Delete Questionnaire"
+                message="Are you sure? You can't undo this action afterwards."
+                showCancelButton
+                okText='Delete'
+                onOk={deleteQuestionnaire}
+                onClose={() => setAlertIsOpen(false)}
+            />
         </Box>
     )
 }
