@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, FormControl, Heading, HStack, Stack } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons' 
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,11 +10,12 @@ import { AppDispatch, Questions } from '../../../../shared/models'
 import './addQuestionnaire.css'
 import Select from '../../../../shared/components/Select'
 import { adminSelector } from '../../store/reducer'
-import { addQuestionnaire } from '../../store/actions'
+import { addQuestionnaire, setQuestionnaires } from '../../store/actions'
 import moment from 'moment'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { RouteURL } from '../../../../lib/path'
 import { getId } from '../../../../lib/helper'
+import { Questionnaire } from '../../models'
 
 const responseTypes = [
     {
@@ -43,8 +44,11 @@ const AddQuestionnaireContent: React.FC = () => {
     const [name, setName] = useState('')
     const [questions, setQuestions] = useState<Questions[]>([])
     const navigate = useNavigate()
+    const params = useParams()
     const dispatch = useDispatch<AppDispatch>()
     const { questionnaires } = useSelector(adminSelector)
+
+    const isEdit = params?.id ? true : false
 
     const handleAddQuestion = () => {
         setQuestions(prevState => ([...prevState,
@@ -122,25 +126,45 @@ const AddQuestionnaireContent: React.FC = () => {
     }
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        console.log('It got here')
+        const result = localStorage.getItem('questionnaires')
         event.preventDefault()
 
-        const result = localStorage.getItem('questionnaires')
-        const properForm = {
-            name,
-            questions,
-            createdAt: moment().format(),
-            updatedAt: moment().format()
-        }
+        if (isEdit) {
+            const properForm = {
+                name,
+                questions,
+                updatedAt: moment().format()
+            }
+            const newQuestionnaires = questionnaires.map((item) => {
+                if (item.id === Number(params?.id)) {
+                    return {...item, ...properForm}
+                }
 
-        if (result) {
-            const resultJson = JSON.parse(result)
-            localStorage.setItem('questionnaires', JSON.stringify([...resultJson, { id: getId(resultJson), ...properForm}]))
+                return item
+            })
+    
+            dispatch(setQuestionnaires(newQuestionnaires))
+    
+            if (result) {
+                localStorage.setItem('questionnaires', JSON.stringify(newQuestionnaires))
+            }
         } else {
-            localStorage.setItem('questionnaires', JSON.stringify([{ id: 1, ...properForm}]))
+            const properForm = {
+                name,
+                questions,
+                createdAt: moment().format(),
+                updatedAt: moment().format()
+            }
+    
+            if (result) {
+                const resultJson = JSON.parse(result)
+                localStorage.setItem('questionnaires', JSON.stringify([...resultJson, { id: getId(resultJson), ...properForm}]))
+            } else {
+                localStorage.setItem('questionnaires', JSON.stringify([{ id: 1, ...properForm}]))
+            }
+    
+            dispatch(addQuestionnaire({id: getId(questionnaires), ...properForm}))
         }
-
-        dispatch(addQuestionnaire({id: getId(questionnaires), ...properForm}))
 
         navigate(RouteURL.AdminDashboard)
     }
@@ -152,9 +176,9 @@ const AddQuestionnaireContent: React.FC = () => {
                     return
                 }
 
-                return <Stack>
+                return <Stack p={5} spacing={5}>
                     {options?.map((item, index) => (
-                        <HStack key={index}>
+                        <HStack key={index} spacing={5}>
                             <Input
                                 value={item.value}
                                 isRequired
@@ -189,9 +213,21 @@ const AddQuestionnaireContent: React.FC = () => {
             </Stack>
         })
     }
+
+    useEffect(() => {
+        if (params.id) {
+            const questionnaire = questionnaires.find((item) => item.id === Number(params.id))
+            if (questionnaire) {
+                setName(questionnaire.name)
+                setQuestions(questionnaire.questions)
+            } else {
+                navigate(RouteURL.AdminDashboard)
+            }
+        }
+    }, [questionnaires, params.id])
     
     return <Box>
-        <DashboardHeader title="Create Questionnaire" />
+        <DashboardHeader title={`${isEdit ? "Edit Questionnaire" : "Create Questionnaire"}`} />
         <Box className=''>
             <form onSubmit={onSubmit}>
                 <FormControl>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex } from '@chakra-ui/react'
-import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons' 
+import { Box, Flex, HStack } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon, SearchIcon, ViewIcon } from '@chakra-ui/icons' 
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import moment from 'moment'
 
 import Button from '../../../../shared/components/Button'
@@ -35,7 +35,7 @@ const column = [
 
 const QuestionListing: React.FC = () => {
     const [data, setData] = useState<GenericObject[]>([])
-    const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate()
     const { questionnaires } = useSelector(adminSelector)
     
     const onSearch = (text: string) => {
@@ -43,20 +43,22 @@ const QuestionListing: React.FC = () => {
         setData(newQuestionnaires)
     }
 
-    useEffect(() => {
-        const result = localStorage.getItem('questionnaires')
-        if (result) dispatch(setQuestionnaires(JSON.parse(result)))
-    }, [])
+    const deletQuestionnaire = (index: number) => {}
 
-    useEffect(() => setData(questionnaires.map((item) => ({
+    useEffect(() => setData(questionnaires.map((item, index) => ({
         key: item.id,
         name: item.name,
         createdAt: moment(item.createdAt).format('MMM D, YYYY'),
         updatedAt: moment(item.updatedAt).format('MMM D, YYYY'),
-        actions: <Flex>
-            <EditIcon color='blue.400' />
-            <DeleteIcon color='red' />
-        </Flex>
+        actions: <HStack spacing={5}>
+            <ViewIcon color="blackAlpha.500" cursor="pointer" />
+            <EditIcon
+                color="blue.400"
+                onClick={() => navigate(`${RouteURL.EditQuestionnaire}${item.id}`)}
+                cursor="pointer"
+            />
+            <DeleteIcon color="red" cursor="pointer" />
+        </HStack>
     }))), [questionnaires])
     
     return (
