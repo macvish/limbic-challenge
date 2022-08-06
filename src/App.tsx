@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, Button, Divider, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
-import { RouteURL } from './helpers/path'
 
+import { RouteURL } from './lib/path'
 
 function App() {
   return (

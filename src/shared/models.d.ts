@@ -9,8 +9,11 @@ export interface GenericObject {
 }
 
 export interface Questions {
-    id: string
+    id: number
     name: string
     type: string
-    value?: string[]
+    options?: {
+        id: number,
+        value: string
+    }[]
 }

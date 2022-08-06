@@ -1,7 +1,7 @@
 import React from "react"
 import { Route, Routes } from 'react-router-dom'
 
-import { RouteURL } from '../helpers/path'
+import { RouteURL } from '../lib/path'
 import App from "../App"
 import AdminDashboard from "../pages/adminDashboard"
 import AddQuestionnaire from "../pages/addQuestionnaire"

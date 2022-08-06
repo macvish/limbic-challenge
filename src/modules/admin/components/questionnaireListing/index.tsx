@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, HStack } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons' 
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -11,20 +11,8 @@ import Table from '../../../../shared/components/Table'
 import { AppDispatch, GenericObject } from '../../../../shared/models'
 import { adminSelector } from '../../store/reducer'
 import { setQuestionnaires } from '../../store/actions'
-import { RouteURL } from '../../../../helpers/path'
+import { RouteURL } from '../../../../lib/path'
 import DashboardHeader from '../../../../shared/components/DashboardHeader'
-
-const dummyData = [
-    {
-        name: 'Questionnaire 1',
-        createdAt: moment().format('MMM D, YYYY'),
-        updatedAt: moment().format('MMM D, YYYY'),
-        actions: <HStack>
-            <EditIcon color='blue.400' />
-            <DeleteIcon color='red' />
-        </HStack>,
-    }
-]
 
 const column = [
     {
@@ -61,10 +49,10 @@ const QuestionListing: React.FC = () => {
     }, [])
 
     useEffect(() => setData(questionnaires.map((item) => ({
-        key: item?.id,
-        name: item?.name,
-        createdAt: item?.createdAt,
-        updatedAt: item?.updatedAt,
+        key: item.id,
+        name: item.name,
+        createdAt: moment(item.createdAt).format('MMM D, YYYY'),
+        updatedAt: moment(item.updatedAt).format('MMM D, YYYY'),
         actions: <Flex>
             <EditIcon color='blue.400' />
             <DeleteIcon color='red' />
@@ -83,7 +71,7 @@ const QuestionListing: React.FC = () => {
                 </Box>
             </Flex>
             <Box>
-                <Table column={column} data={dummyData} />
+                <Table column={column} data={data} />
             </Box>
         </Box>
     )
