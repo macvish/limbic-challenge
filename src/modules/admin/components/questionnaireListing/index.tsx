@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, Heading } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons' 
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 import Button from '../../../../shared/components/Button'
@@ -9,14 +11,8 @@ import Table from '../../../../shared/components/Table'
 import { AppDispatch, GenericObject } from '../../../../shared/models'
 import { adminSelector } from '../../store/reducer'
 import { setQuestionnaires } from '../../store/actions'
-
-const dummyData = [
-    {
-        name: 'Questionnaire 1',
-        createdAt: moment().format('MMM D, YYYY'),
-        updatedAt: moment().format('MMM D, YYYY')
-    }
-]
+import { RouteURL } from '../../../../lib/path'
+import DashboardHeader from '../../../../shared/components/DashboardHeader'
 
 const column = [
     {
@@ -30,6 +26,10 @@ const column = [
     {
         title: 'Date Updated',
         dataIndex: 'updatedAt'
+    },
+    {
+        title: 'Actions',
+        dataIndex: 'actions'
     }
 ]
 
@@ -48,21 +48,30 @@ const QuestionListing: React.FC = () => {
         if (result) dispatch(setQuestionnaires(JSON.parse(result)))
     }, [])
 
-    useEffect(() => setData(questionnaires), [questionnaires])
+    useEffect(() => setData(questionnaires.map((item) => ({
+        key: item.id,
+        name: item.name,
+        createdAt: moment(item.createdAt).format('MMM D, YYYY'),
+        updatedAt: moment(item.updatedAt).format('MMM D, YYYY'),
+        actions: <Flex>
+            <EditIcon color='blue.400' />
+            <DeleteIcon color='red' />
+        </Flex>
+    }))), [questionnaires])
     
     return (
         <Box>
-            <Heading size="lg" mb={4}>Questionnaires</Heading>
+            <DashboardHeader title="Questionnaires" />
             <Flex justify="space-between">
                 <Box>  
-                    <Button title="Create Questionnaire" />
+                    <Link to={RouteURL.AddQuestionnaire}><Button title="Create Questionnaire" /></Link>
                 </Box>
                 <Box>
-                    <Input onChangeText={onSearch} placeholder="Search" />
+                    <Input onChangeText={onSearch} placeholder="Search" leftElement={<SearchIcon />} />
                 </Box>
             </Flex>
             <Box>
-                <Table column={column} data={dummyData} />
+                <Table column={column} data={data} />
             </Box>
         </Box>
     )

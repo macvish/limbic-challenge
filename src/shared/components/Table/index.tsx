@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table as CUTable, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Flex, Table as CUTable, TableContainer, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import { GenericObject } from '../../models.d'
 
 interface Props {
@@ -39,6 +39,7 @@ const Table: React.FC<Props> = ({ column, data }) => {
                     {renderData()}
                 </Tbody>
             </CUTable>
+            {data.length < 1 && <Flex justifyContent="center" mt={3}><Text fontSize="sm" as="i" align="center">Nothing to see here.</Text></Flex>}
         </TableContainer>
     )
 }

@@ -1,7 +1,15 @@
-import { GenericObject } from "../../shared/models"
+import { Questions } from "../../shared/models"
 
 export interface AdminState {
-    questionnaires: GenericObject[]
+    questionnaires: Questionnaire[]
+}
+
+export interface Questionnaire {
+    id: number
+    name: string
+    questions: Questions[]
+    createdAt: string
+    updatedAt: string
 }
 
 export enum ActionType {
