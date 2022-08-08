@@ -1,0 +1,19 @@
+.dashboard-header {
+  box-shadow: 0px 2px 10px #916b7f12;
+}
+
+.menu-list-item a {
+  color: #FFFFFF;
+  font-size: 15px;
+}
+
+.menu-list-item {
+  padding: 4px;
+}
+
+.menu-list-item:hover {
+  background-color: #6A6983;
+  border-radius: 4px;
+}
+
+.menu-list-item {}
