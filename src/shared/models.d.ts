@@ -17,3 +17,11 @@ export interface Questions {
         value: string
     }[]
 }
+
+export interface Client {
+    id: number
+    fullName: string
+    age: number
+    createdAt: string
+    updatedAt: string
+}

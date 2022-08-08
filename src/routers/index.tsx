@@ -6,9 +6,11 @@ import App from "../App"
 import AdminDashboard from "../pages/adminDashboard"
 import AddQuestionnaire from "../pages/addQuestionnaire"
 import QuestionsListing from "../pages/questionsListing"
+import ClientListing from "../pages/clientsListing"
 
 export const IndexRouter: React.FC = () => (
     <Routes>
+        <Route path={`${RouteURL.Clients}`} element={<ClientListing />} />
         <Route path={`${RouteURL.Quetionnaire}:id`} element={<QuestionsListing />} />
         <Route path={`${RouteURL.EditQuestionnaire}:id`} element={<AddQuestionnaire />} />
         <Route path={RouteURL.AddQuestionnaire} element={<AddQuestionnaire />} />
