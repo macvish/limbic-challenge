@@ -1,10 +1,11 @@
 import { createReducer, PayloadAction } from '@reduxjs/toolkit'
 
 import { ActionType, AdminState, Questionnaire } from '../../models'
-import { RootState } from '../../../../shared/models'
+import { Client, RootState } from '../../../../shared/models'
 
 const initialAdminState: AdminState = {
-    questionnaires: []
+    questionnaires: [],
+    clients: []
 }
 
 const adminReducer = createReducer(initialAdminState, {
@@ -13,6 +14,12 @@ const adminReducer = createReducer(initialAdminState, {
     },
     [ActionType.ADD_QUESTIONNAIRE]: (state, action: PayloadAction<Questionnaire>) => {
         state.questionnaires = [...state.questionnaires, action.payload]
+    },
+    [ActionType.SET_CLIENTS]: (state, action: PayloadAction<Client[]>) => {
+        state.clients = action.payload
+    },
+    [ActionType.ADD_CLIENT]: (state, action: PayloadAction<Client>) => {
+        state.clients = [...state.clients, action.payload]
     }
 })
 

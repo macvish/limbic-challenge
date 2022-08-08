@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Box, Flex, List, ListItem } from '@chakra-ui/react'
+import { Box, Flex, List, ListItem, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import './dashboardLayout.css'
@@ -16,6 +16,12 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const dispatch = useDispatch<AppDispatch>()
     const { questionnaires } = useSelector(adminSelector)
+
+    const renderMenuItem = (title: string, route: string) => (
+        <ListItem className='menu-list-item'>
+            <Link to={route}><Text w="100%">{title}</Text></Link>
+        </ListItem>
+    )
     
     useEffect(() => {
         const result = localStorage.getItem('questionnaires')
@@ -28,9 +34,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <Flex h="100%" flex={1}>
                 <Flex w="25%" flex={1} backgroundColor="#F98BA4"  p={5} pt={10}>
                     <List w="100%" spacing={3}>
-                        <ListItem className='menu-list-item'><Link to={RouteURL.AdminDashboard}>Questions</Link></ListItem>
-                        <ListItem className='menu-list-item'><Link to=''>Clients</Link></ListItem>
-                        <ListItem className='menu-list-item'><Link to=''>Answers</Link></ListItem>
+                        {renderMenuItem('Questionnaires', RouteURL.AdminDashboard)}
+                        {renderMenuItem('Clients', RouteURL.Clients)}
+                        {renderMenuItem('Back to Login', '/')}
                     </List>
                 </Flex>
                 <Box w="75%" h="100%" p={5}>
