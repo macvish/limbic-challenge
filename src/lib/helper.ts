@@ -5,3 +5,26 @@ export const getId = (arr: GenericObject[]): number => {
 
     return id
 }
+
+export const responseTypes = [
+    {
+        value: 'input',
+        label: 'Input Field'
+    },
+    {
+        value: 'select',
+        label: 'Select Field'
+    },
+    {
+        value: 'radio',
+        label: 'Radio Field'
+    },
+    {
+        value: 'checkbox',
+        label: 'Checkbox Field'
+    },
+    {
+        value: 'textarea',
+        label: 'TextArea Field'
+    }
+]
