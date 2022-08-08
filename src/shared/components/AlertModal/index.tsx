@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef } from "react"
+import React, { useRef } from "react"
 import {
     AlertDialog,
     AlertDialogBody,
@@ -6,8 +6,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
-    Button,
-    useDisclosure
+    Button
 } from "@chakra-ui/react"
 
 interface Props {
@@ -21,7 +20,7 @@ interface Props {
     onClose: () => void
 }
 
-const AlertModal: React.FC<Props> = ({ cancelText, isOpen, message, onClose, onOk, okText, showCancelButton, title }, ref) => {
+const AlertModal: React.FC<Props> = ({ cancelText, isOpen, message, onClose, onOk, okText, showCancelButton, title }) => {
     const cancelRef = useRef(null)
 
     return <AlertDialog

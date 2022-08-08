@@ -14,31 +14,7 @@ import { addQuestionnaire, setQuestionnaires } from '../../store/actions'
 import moment from 'moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RouteURL } from '../../../../lib/path'
-import { getId } from '../../../../lib/helper'
-import { Questionnaire } from '../../models'
-
-const responseTypes = [
-    {
-        value: 'input',
-        label: 'Input Field'
-    },
-    {
-        value: 'select',
-        label: 'Select Field'
-    },
-    {
-        value: 'radio',
-        label: 'Radio Field'
-    },
-    {
-        value: 'checkbox',
-        label: 'Checkbox Field'
-    },
-    {
-        value: 'textarea',
-        label: 'TextArea Field'
-    }
-]
+import { getId, responseTypes } from '../../../../lib/helper'
 
 const AddQuestionnaireContent: React.FC = () => {
     const [name, setName] = useState('')

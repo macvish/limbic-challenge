@@ -14,6 +14,7 @@ import { setQuestionnaires } from '../../store/actions'
 import { RouteURL } from '../../../../lib/path'
 import DashboardHeader from '../../../../shared/components/DashboardHeader'
 import AlertModal from '../../../../shared/components/AlertModal'
+import { Questionnaire } from '../../models'
 
 const column = [
     {
@@ -41,10 +42,37 @@ const QuestionListing: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch<AppDispatch>()
     const { questionnaires } = useSelector(adminSelector)
+
+    const tableData = (item: Questionnaire, index: number) => ({
+        key: item.id,
+        name: item.name,
+        createdAt: moment(item.createdAt).format('MMM D YYYY, h:mm a'),
+        updatedAt: moment(item.updatedAt).format('MMM D YYYY, h:mm a'),
+        actions: <HStack spacing={5}>
+            <ViewIcon
+                color="blackAlpha.500"
+                cursor="pointer"
+                onClick={() => navigate(`${RouteURL.Quetionnaire}${item.id}`)}
+            />
+            <EditIcon
+                color="blue.400"
+                onClick={() => navigate(`${RouteURL.EditQuestionnaire}${item.id}`)}
+                cursor="pointer"
+            />
+            <DeleteIcon
+                color="red"
+                cursor="pointer"
+                onClick={() => {
+                    setSelectedQuestionnaireIndex(index)
+                    setAlertIsOpen(true)
+                }}
+            />
+        </HStack>
+    })
     
     const onSearch = (text: string) => {
-        const newQuestionnaires = questionnaires.filter(item => String(item?.name).toLowerCase().includes(text))
-        setData(newQuestionnaires)
+        const newQuestionnaires = questionnaires.filter(item => String(item?.name).toLowerCase().includes(text.toLowerCase()))
+        setData(newQuestionnaires.map(tableData))
     }
 
     const deleteQuestionnaire = () => {
@@ -56,24 +84,7 @@ const QuestionListing: React.FC = () => {
         setAlertIsOpen(false)
     }
 
-    useEffect(() => setData(questionnaires.map((item, index) => ({
-        key: item.id,
-        name: item.name,
-        createdAt: moment(item.createdAt).format('MMM D, YYYY'),
-        updatedAt: moment(item.updatedAt).format('MMM D, YYYY'),
-        actions: <HStack spacing={5}>
-            <ViewIcon color="blackAlpha.500" cursor="pointer" />
-            <EditIcon
-                color="blue.400"
-                onClick={() => navigate(`${RouteURL.EditQuestionnaire}${item.id}`)}
-                cursor="pointer"
-            />
-            <DeleteIcon color="red" cursor="pointer" onClick={() => {
-                setSelectedQuestionnaireIndex(index)
-                setAlertIsOpen(true)
-            }} />
-        </HStack>
-    }))), [questionnaires])
+    useEffect(() => setData(questionnaires.map(tableData)), [questionnaires])
     
     return (
         <Box>
