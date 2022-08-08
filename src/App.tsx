@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Button, Divider, Flex, Heading, Stack, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { RouteURL } from './lib/path'
+import { fakeUsers } from './lib/helper'
 
-function App() {
+const App: React.FC = () => {
+  useEffect(() => {
+    const result = localStorage.getItem('clients')
+
+    if (!result) {
+      localStorage.setItem('clients', JSON.stringify(fakeUsers))
+    }
+  }, [])
+  
   return (
     <Flex>
       <Box w="55%" h="100vh" backgroundColor="#F98BA4"></Box>

@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Box, Flex, FormControl, HStack, Stack } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons'
+import moment from 'moment'
 
 import { AppDispatch, Client, GenericObject } from '../../../../shared/models'
 import { adminSelector } from '../../store/reducer'
-import { Box, Flex, FormControl, HStack, Stack } from '@chakra-ui/react'
 import DashboardHeader from '../../../../shared/components/DashboardHeader'
 import Button from '../../../../shared/components/Button'
 import Input from '../../../../shared/components/Input'
-import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons'
 import Table from '../../../../shared/components/Table'
 import AlertModal from '../../../../shared/components/AlertModal'
 import { addClients, setClients } from '../../store/actions'
 import Modal from '../../../../shared/components/Modal'
 import { getId } from '../../../../lib/helper'
-import moment from 'moment'
 
 const column = [
     {
-        title: 'Name',
-        dataIndex: 'name'
+        title: 'Full Name',
+        dataIndex: 'fullName'
     },
     {
-        title: 'age',
+        title: 'Age',
         dataIndex: 'age'
+    },
+    {
+        title: 'Date Created',
+        dataIndex: 'createdAt'
+    },
+    {
+        title: 'Date Updated',
+        dataIndex: 'updatedAt'
     },
     {
         title: 'Actions',
@@ -41,13 +49,15 @@ const ClientListingContent: React.FC = () => {
     const { clients } = useSelector(adminSelector)
 
     const tableDataFormat = (item: Client, index: number) => ({
-        name: item.fullName,
+        fullName: item.fullName,
         age: item.age,
+        createdAt: moment(item.createdAt).format('MMM D YYYY, h:mm a'),
+        updatedAt: moment(item.updatedAt).format('MMM D YYYY, h:mm a'),
         actions: <HStack spacing={5}>
             <EditIcon
                 color="blue.400"
                 onClick={() => {
-                    setSelectedClient(clients.find((data) => data.id === item.id) as Client)
+                    setSelectedClient(item)
                     setIsEditModalOpen(true)
                 }}
                 cursor="pointer"
@@ -64,8 +74,8 @@ const ClientListingContent: React.FC = () => {
     })
 
     const onSearch = (text: string) => {
-        const newQuestions = clients.filter(item => String(item?.fullName).toLowerCase().includes(text.toLowerCase()))
-        setTableData(newQuestions.map(tableDataFormat))
+        const newClients = clients.filter(item => String(item?.fullName).toLowerCase().includes(text.toLowerCase()))
+        setTableData(newClients.map(tableDataFormat))
     }
 
     const deleteClient = () => {
@@ -174,6 +184,10 @@ const ClientListingContent: React.FC = () => {
         const result = localStorage.getItem('clients')
         if (result && clients.length < 1) dispatch(setClients(JSON.parse(result)))
     }, [])
+
+    useEffect(() => {
+        if (clients.length > 0) setTableData(clients.map(tableDataFormat))
+    }, [clients])
 
     return (
         <Box>

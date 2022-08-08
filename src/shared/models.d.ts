@@ -18,6 +18,17 @@ export interface Questions {
     }[]
 }
 
+export interface Answers {
+    id: number
+    clientId: number
+    answerData: {
+        questionId: number
+        answer: string | string[]
+    }[]
+    createdAt: string
+    updatedAt: string
+}
+
 export interface Client {
     id: number
     fullName: string

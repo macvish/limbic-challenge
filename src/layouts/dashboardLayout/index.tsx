@@ -36,7 +36,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                     <List w="100%" spacing={3}>
                         {renderMenuItem('Questionnaires', RouteURL.AdminDashboard)}
                         {renderMenuItem('Clients', RouteURL.Clients)}
-                        {renderMenuItem('Answers', '')}
+                        {renderMenuItem('Back to Login', '/')}
                     </List>
                 </Flex>
                 <Box w="75%" h="100%" p={5}>

@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Box, Flex, FormControl, HStack, Stack, Text } from '@chakra-ui/react'
+import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons'
+import moment from 'moment'
 
 import { AppDispatch, GenericObject, Questions } from '../../../../shared/models'
 import { adminSelector } from '../../store/reducer'
 import { RouteURL } from '../../../../lib/path'
-import { Box, Flex, FormControl, HStack, Stack } from '@chakra-ui/react'
 import DashboardHeader from '../../../../shared/components/DashboardHeader'
 import Button from '../../../../shared/components/Button'
 import Input from '../../../../shared/components/Input'
-import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons'
 import Table from '../../../../shared/components/Table'
 import AlertModal from '../../../../shared/components/AlertModal'
 import { setQuestionnaires } from '../../store/actions'
 import Modal from '../../../../shared/components/Modal'
 import Select from '../../../../shared/components/Select'
 import { getId, responseTypes } from '../../../../lib/helper'
-import moment from 'moment'
+import AnswersListingContent from '../answersListing'
 
 const column = [
     {
@@ -54,7 +55,7 @@ const QuestionsListingContent: React.FC = () => {
             <EditIcon
                 color="blue.400"
                 onClick={() => {
-                    setSelectedQuestion(questions.find((data) => data.id === item.id) as Questions)
+                    setSelectedQuestion(item)
                     setIsEditModalOpen(true)
                 }}
                 cursor="pointer"
@@ -281,9 +282,13 @@ const QuestionsListingContent: React.FC = () => {
                     <Input onChangeText={onSearch} placeholder="Search" leftElement={<SearchIcon />} />
                 </Box>
             </Flex>
-            <Box>
+            <Stack spacing={10}>
                 <Table column={column} data={tableData} />
-            </Box>
+                <Box>
+                    <Text></Text>
+                    <AnswersListingContent questions={questions} />
+                </Box>
+            </Stack>
             <AlertModal
                 isOpen={alertIsOpen}
                 title="Delete Questionnaire"
