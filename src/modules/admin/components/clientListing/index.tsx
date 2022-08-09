@@ -181,11 +181,6 @@ const ClientListingContent: React.FC = () => {
     }
 
     useEffect(() => {
-        const result = localStorage.getItem('clients')
-        if (result && clients.length < 1) dispatch(setClients(JSON.parse(result)))
-    }, [])
-
-    useEffect(() => {
         if (clients.length > 0) setTableData(clients.map(tableDataFormat))
     }, [clients])
 

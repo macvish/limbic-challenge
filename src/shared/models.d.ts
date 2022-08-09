@@ -8,6 +8,15 @@ export interface GenericObject {
     [key: string]: any
 }
 
+export interface Questionnaire {
+    id: number
+    name: string
+    questions: Questions[]
+    answers?: Answers[]
+    createdAt: string
+    updatedAt: string
+}
+
 export interface Questions {
     id: number
     name: string
@@ -21,12 +30,14 @@ export interface Questions {
 export interface Answers {
     id: number
     clientId: number
-    answerData: {
-        questionId: number
-        answer: string | string[]
-    }[]
+    answerData: AnswerData[]
     createdAt: string
     updatedAt: string
+}
+
+export interface AnswerData {
+    questionId: number
+    answer: string | string[]
 }
 
 export interface Client {

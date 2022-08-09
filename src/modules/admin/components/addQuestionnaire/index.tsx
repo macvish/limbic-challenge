@@ -148,7 +148,7 @@ const AddQuestionnaireContent: React.FC = () => {
     const renderForm = () => {
         return questions.map(({ id, name, type, options }, index) => {
             const showOptions = () => {
-                if (type === '' || type === 'input' || type === 'textarea') {
+                if (type === '' || type === 'text' || type === 'textarea') {
                     return
                 }
 

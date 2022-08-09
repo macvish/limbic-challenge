@@ -35,7 +35,7 @@ const column = [
     }
 ]
 
-const QuestionListing: React.FC = () => {
+const QuestionnaireListing: React.FC = () => {
     const [selectedQuestionnaireIndex, setSelectedQuestionnaireIndex] = useState<number>(0)
     const [alertIsOpen, setAlertIsOpen] = useState<boolean>(false)
     const [data, setData] = useState<GenericObject[]>([])
@@ -113,4 +113,4 @@ const QuestionListing: React.FC = () => {
     )
 }
 
-export default QuestionListing
+export default QuestionnaireListing

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Box, Flex, List, ListItem, Text } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import './dashboardLayout.css'
 import { RouteURL } from '../../lib/path'
-import { setQuestionnaires } from '../../modules/admin/store/actions'
+import { setClients, setQuestionnaires } from '../../modules/admin/store/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../shared/models'
 import { adminSelector } from '../../modules/admin/store/reducer'
@@ -15,7 +15,11 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     const dispatch = useDispatch<AppDispatch>()
-    const { questionnaires } = useSelector(adminSelector)
+    const { clients, questionnaires } = useSelector(adminSelector)
+    const params = useParams()
+    const location = useLocation()
+
+    const isClient = location.pathname === `${RouteURL.ClientDashboard}${params.id}`
 
     const renderMenuItem = (title: string, route: string) => (
         <ListItem className='menu-list-item'>
@@ -24,8 +28,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     )
     
     useEffect(() => {
-        const result = localStorage.getItem('questionnaires')
-        if (result && questionnaires.length < 1) dispatch(setQuestionnaires(JSON.parse(result)))
+        const clientResult = localStorage.getItem('clients')
+        const questionnaireResult = localStorage.getItem('questionnaires')
+        if (clientResult && clients.length < 1) dispatch(setClients(JSON.parse(clientResult)))
+        if (questionnaireResult && questionnaires.length < 1) dispatch(setQuestionnaires(JSON.parse(questionnaireResult)))
     }, [])
 
     return (
@@ -34,8 +40,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <Flex h="100%" flex={1}>
                 <Flex w="25%" flex={1} backgroundColor="#F98BA4"  p={5} pt={10}>
                     <List w="100%" spacing={3}>
-                        {renderMenuItem('Questionnaires', RouteURL.AdminDashboard)}
-                        {renderMenuItem('Clients', RouteURL.Clients)}
+                        {!isClient && <>
+                            {renderMenuItem('Questionnaires', RouteURL.AdminDashboard)}
+                            {renderMenuItem('Clients', RouteURL.Clients)}
+                        </>}
                         {renderMenuItem('Back to Login', '/')}
                     </List>
                 </Flex>

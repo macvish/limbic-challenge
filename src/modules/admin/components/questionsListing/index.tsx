@@ -50,7 +50,7 @@ const QuestionsListingContent: React.FC = () => {
 
     const tableDataFormat = (item: Questions, index: number) => ({
         question: item.name,
-        type: item.type,
+        type: responseTypes.find(response => response.value === item.type)?.label,
         actions: <HStack spacing={5}>
             <EditIcon
                 color="blue.400"
@@ -186,7 +186,7 @@ const QuestionsListingContent: React.FC = () => {
 
     const renderForm = () => {
         const showOptions = () => {
-            if (selectedQuestion?.type === '' || selectedQuestion?.type === 'input' || selectedQuestion?.type === 'textarea') {
+            if (selectedQuestion?.type === '' || selectedQuestion?.type === 'text' || selectedQuestion?.type === 'textarea') {
                 return
             }
 
