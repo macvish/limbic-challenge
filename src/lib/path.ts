@@ -3,5 +3,6 @@ export enum RouteURL {
     AddQuestionnaire = '/admin/questionnaire/add',
     EditQuestionnaire = '/admin/questionnaire/edit/',
     Quetionnaire = '/admin/questionnaire/',
-    Clients = '/admin/clients'
+    Clients = '/admin/clients',
+    ClientDashboard = '/client/'
 }

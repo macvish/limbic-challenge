@@ -47,7 +47,6 @@ const AnswersListingContent: React.FC<Props> = ({ questions }) => {
     const dispatch = useDispatch<AppDispatch>()
     const { questionnaires, clients } = useSelector(adminSelector)
     const params = useParams()
-    const navigate = useNavigate()
 
     const tableDataFormat = (item: Answers, index: number) => ({
         clientName: clients.find(data => data.id === item.clientId)?.fullName,
@@ -57,7 +56,10 @@ const AnswersListingContent: React.FC<Props> = ({ questions }) => {
             <ViewIcon
                 color="blackAlpha.500"
                 cursor="pointer"
-                onClick={() => navigate(`${RouteURL.Quetionnaire}${item.id}`)}
+                onClick={() => {
+                    setSelectedAnswer(item)
+                    setIsViewModalOpen(true)
+                }}
             />
             <DeleteIcon
                 color="red"
@@ -104,16 +106,19 @@ const AnswersListingContent: React.FC<Props> = ({ questions }) => {
                     ))
                 }
 
-                return item.answer
+                return <Text>{item.answer}</Text>
             }
             
             if (question) {
-                return <Stack key={index} spacing={7}>
-                    <Text>{question.name}</Text>
-                    {renderMultiAnswers()}
+                return <Stack key={index} spacing={1}>
+                    <Text fontWeight="medium">{question.name}</Text>
+                    <Box mr={4}>
+                        {renderMultiAnswers()}
+                    </Box>
                 </Stack>
             }
-                
+            
+            return <></>
         })
     }
 
@@ -125,7 +130,9 @@ const AnswersListingContent: React.FC<Props> = ({ questions }) => {
             hideOkButton
             isCentered
         >
-            {renderAnswerItem()}
+            <Stack spacing={4}>
+                {renderAnswerItem()}
+            </Stack>
         </Modal>
     }
 
